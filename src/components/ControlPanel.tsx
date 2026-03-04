@@ -475,7 +475,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ config, onChange }) => {
         </div>
 
         {/* Scrollable content */}
-        <div className="flex-1 overflow-y-auto scrollbar-thin p-5">
+        <div className="flex-1 overflow-y-auto scrollbar-thin px-5 py-[15px]">
           <Section title="Beams">
             <Slider label="Count" value={config.numBeams} min={1} max={80} step={1} onChange={(v) => handleUpdate("numBeams", v)} />
             <Slider label="Convergence gap" value={config.convergenceGap} min={0} max={0.4} step={0.01} onChange={(v) => handleUpdate("convergenceGap", v)} />
