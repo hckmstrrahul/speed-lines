@@ -160,7 +160,7 @@ const ColorInput: React.FC<ColorInputProps> = ({ label, value, onChange }) => {
   );
 
   return (
-    <div className="flex items-center justify-between px-[10px]">
+    <div className="flex items-center justify-between px-[10px] pt-0 pb-0">
       <span className="text-[12px] font-medium text-white/40">{label}</span>
       <div className="flex items-center gap-[10px]">
         <span className="text-[12px] tabular-nums text-white/25 uppercase">{value}</span>
@@ -223,6 +223,34 @@ const ColorChip: React.FC<ColorChipProps> = ({ color, onRemove, onChange }) => {
   );
 };
 
+/* ─── Text Input ─── */
+
+type TextInputProps = {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+};
+
+const TextInput: React.FC<TextInputProps> = ({ label, value, onChange }) => {
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value),
+    [onChange]
+  );
+
+  return (
+    <div className="flex flex-col gap-[6px] px-[10px] pt-[5px] pb-[8px]">
+      <span className="text-[12px] font-medium text-white/40">{label}</span>
+      <input
+        type="text"
+        value={value}
+        onChange={handleChange}
+        className="w-full rounded-[8px] border border-white/6 bg-white/4 px-[10px] py-[6px] text-[12px] text-white/70 outline-none transition-colors placeholder:text-white/20 focus:border-white/15 focus:bg-white/6"
+        aria-label={label}
+      />
+    </div>
+  );
+};
+
 /* ─── Download Config ─── */
 
 const handleDownloadConfig = (config: SpeedLinesConfig) => {
@@ -269,6 +297,28 @@ const handleDownloadConfig = (config: SpeedLinesConfig) => {
     `  accentOpacity        : ${config.accentOpacity}`,
     `  accentStrokeWidth    : ${config.accentStrokeWidth}px`,
     "",
+    "TEXT OVERLAY",
+    `  showOverlay          : ${config.showOverlay}`,
+    `  overlayHeading       : ${config.overlayHeading}`,
+    `  overlaySubtext       : ${config.overlaySubtext}`,
+    `  overlayButtonText    : ${config.overlayButtonText}`,
+    `  overlayButtonUrl     : ${config.overlayButtonUrl}`,
+    `  overlayY             : ${config.overlayY}px`,
+    "",
+    "CENTER GLOW",
+    `  showCenterGlow       : ${config.showCenterGlow}`,
+    `  centerGlowRadius     : ${config.centerGlowRadius}px`,
+    `  centerGlowOpacity    : ${config.centerGlowOpacity}`,
+    `  centerGlowColor      : ${config.centerGlowColor}`,
+    `  centerGlowColorOuter : ${config.centerGlowColorOuter}`,
+    `  centerGlowY          : ${config.centerGlowY}px`,
+    "",
+    "GRID",
+    `  showGrid             : ${config.showGrid}`,
+    `  gridSize             : ${config.gridSize}px`,
+    `  gridOpacity          : ${config.gridOpacity}`,
+    `  gridColor            : ${config.gridColor}`,
+    "",
     "CANVAS",
     `  canvasWidth          : ${config.canvasWidth}`,
     `  canvasHeight         : ${config.canvasHeight}`,
@@ -309,14 +359,19 @@ const parseConfigFromText = (text: string): SpeedLinesConfig | null => {
       "dashLength", "dashGap", "particleExtraWidth", "accentOpacity",
       "accentStrokeWidth", "verticalSpread", "outerVerticalSpread",
       "edgeGlowOpacity", "vignetteOpacity", "seed",
+      "centerGlowRadius", "centerGlowOpacity", "centerGlowY",
+      "gridSize", "gridOpacity", "overlayY",
     ];
 
     const booleanKeys: (keyof SpeedLinesConfig)[] = [
       "showAccentBeams", "showEdgeGlow", "showVignette",
+      "showOverlay", "showCenterGlow", "showGrid",
     ];
 
     const stringKeys: (keyof SpeedLinesConfig)[] = [
       "accentColor", "backgroundColor",
+      "overlayHeading", "overlaySubtext", "overlayButtonText", "overlayButtonUrl",
+      "centerGlowColor", "centerGlowColorOuter", "gridColor",
     ];
 
     for (const key of numberKeys) {
@@ -542,6 +597,43 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ config, onChange }) => {
               <>
                 <Slider label="Opacity" value={config.accentOpacity} min={0} max={1} step={0.01} onChange={(v) => handleUpdate("accentOpacity", v)} />
                 <Slider label="Stroke width" value={config.accentStrokeWidth} min={0.5} max={8} step={0.1} onChange={(v) => handleUpdate("accentStrokeWidth", v)} suffix="px" />
+              </>
+            )}
+          </Section>
+
+          <Section title="Text Overlay" defaultOpen={false}>
+            <Toggle label="Show overlay" value={config.showOverlay} onChange={(v) => handleUpdate("showOverlay", v)} />
+            {config.showOverlay && (
+              <>
+                <TextInput label="Heading" value={config.overlayHeading} onChange={(v) => handleUpdate("overlayHeading", v)} />
+                <TextInput label="Subtext" value={config.overlaySubtext} onChange={(v) => handleUpdate("overlaySubtext", v)} />
+                <TextInput label="Button text" value={config.overlayButtonText} onChange={(v) => handleUpdate("overlayButtonText", v)} />
+                <TextInput label="Button URL" value={config.overlayButtonUrl} onChange={(v) => handleUpdate("overlayButtonUrl", v)} />
+                <Slider label="Vertical offset" value={config.overlayY} min={-400} max={400} step={5} onChange={(v) => handleUpdate("overlayY", v)} suffix="px" />
+              </>
+            )}
+          </Section>
+
+          <Section title="Center Glow" defaultOpen={false}>
+            <Toggle label="Show glow" value={config.showCenterGlow} onChange={(v) => handleUpdate("showCenterGlow", v)} />
+            {config.showCenterGlow && (
+              <>
+                <Slider label="Radius" value={config.centerGlowRadius} min={100} max={1000} step={10} onChange={(v) => handleUpdate("centerGlowRadius", v)} suffix="px" />
+                <Slider label="Opacity" value={config.centerGlowOpacity} min={0} max={1} step={0.01} onChange={(v) => handleUpdate("centerGlowOpacity", v)} />
+                <Slider label="Vertical offset" value={config.centerGlowY} min={-800} max={800} step={5} onChange={(v) => handleUpdate("centerGlowY", v)} suffix="px" />
+                <ColorInput label="Inner color" value={config.centerGlowColor} onChange={(v) => handleUpdate("centerGlowColor", v)} />
+                <ColorInput label="Outer color" value={config.centerGlowColorOuter} onChange={(v) => handleUpdate("centerGlowColorOuter", v)} />
+              </>
+            )}
+          </Section>
+
+          <Section title="Grid" defaultOpen={false}>
+            <Toggle label="Show grid" value={config.showGrid} onChange={(v) => handleUpdate("showGrid", v)} />
+            {config.showGrid && (
+              <>
+                <Slider label="Cell size" value={config.gridSize} min={20} max={200} step={5} onChange={(v) => handleUpdate("gridSize", v)} suffix="px" />
+                <Slider label="Opacity" value={config.gridOpacity} min={0} max={0.3} step={0.005} onChange={(v) => handleUpdate("gridOpacity", v)} />
+                <ColorInput label="Grid color" value={config.gridColor} onChange={(v) => handleUpdate("gridColor", v)} />
               </>
             )}
           </Section>

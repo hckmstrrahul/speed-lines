@@ -33,6 +33,22 @@ export type SpeedLinesConfig = {
   showEdgeGlow: boolean;
   showVignette: boolean;
   seed: number;
+  showOverlay: boolean;
+  overlayHeading: string;
+  overlaySubtext: string;
+  overlayButtonText: string;
+  overlayButtonUrl: string;
+  showGrid: boolean;
+  gridSize: number;
+  gridOpacity: number;
+  gridColor: string;
+  showCenterGlow: boolean;
+  centerGlowRadius: number;
+  centerGlowOpacity: number;
+  centerGlowColor: string;
+  centerGlowColorOuter: string;
+  centerGlowY: number;
+  overlayY: number;
 };
 
 export const DEFAULT_CONFIG: SpeedLinesConfig = {
@@ -64,6 +80,22 @@ export const DEFAULT_CONFIG: SpeedLinesConfig = {
   showEdgeGlow: false,
   showVignette: true,
   seed: 42,
+  showOverlay: true,
+  overlayHeading: "Built for Speed",
+  overlaySubtext: "Quick execution, one-click orders, and keyboard shortcuts for speedy trading",
+  overlayButtonText: "Launch Scalper Zone",
+  overlayButtonUrl: "#",
+  showGrid: true,
+  gridSize: 60,
+  gridOpacity: 0.10,
+  gridColor: "#46a09a",
+  showCenterGlow: true,
+  centerGlowRadius: 590,
+  centerGlowOpacity: 0.20,
+  centerGlowColor: "#9EFFB6",
+  centerGlowColorOuter: "#244347",
+  centerGlowY: 640,
+  overlayY: -100,
 };
 
 const seededRandom = (seed: number) => {

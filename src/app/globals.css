@@ -129,3 +129,48 @@ input[type="color"]::-moz-color-swatch {
   border: none;
   border-radius: 6px;
 }
+
+/* ─── Button glow converge ─── */
+@keyframes glow-from-left {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  45% {
+    transform: translateX(0%);
+    opacity: 0.5;
+  }
+  60% {
+    transform: translateX(0%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0%);
+    opacity: 0;
+  }
+}
+
+@keyframes glow-from-right {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  45% {
+    transform: translateX(0%);
+    opacity: 0.5;
+  }
+  60% {
+    transform: translateX(0%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0%);
+    opacity: 0;
+  }
+}

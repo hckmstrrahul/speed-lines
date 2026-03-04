@@ -6,6 +6,7 @@ import SpeedLinesBackground, {
   DEFAULT_CONFIG,
 } from "@/components/SpeedLinesBackground";
 import ControlPanel from "@/components/ControlPanel";
+import HeroSection from "@/components/HeroSection";
 
 const Home = () => {
   const [config, setConfig] = useState<SpeedLinesConfig>(DEFAULT_CONFIG);
@@ -23,6 +24,7 @@ const Home = () => {
         <SpeedLinesBackground config={config} />
       </div>
 
+      <HeroSection config={config} />
       <ControlPanel config={config} onChange={handleConfigChange} />
     </main>
   );
