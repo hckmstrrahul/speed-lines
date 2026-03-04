@@ -1,36 +1,110 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Speed Lines
+
+A real-time configuration playground for animated speed-line backgrounds. Design, preview, and export stunning converging beam effects for hero sections, landing pages, and beyond.
+
+## Features
+
+- **Live preview** — every parameter updates the background instantly
+- **Configurable beams** — control count, convergence gap, vertical spread, palette, opacity, stroke width, glow blur, and animation
+- **Accent beams** — add highlighted beams with separate styling
+- **Text overlay** — hero heading, subtext, and CTA button with customizable content and URL
+- **Effects** — vignette, edge glow, center radial glow, and orthogonal grid with fade mask
+- **Seeded RNG** — deterministic layouts via a configurable seed
+- **Export / Import** — download configs as `.txt` (human-readable summary + raw JSON) and re-import them later
+- **Randomize & Reset** — quickly explore variations or restore defaults
+
+## Tech Stack
+
+| Category | Technology |
+| --- | --- |
+| Framework | Next.js 16 (App Router) |
+| UI | React 19 |
+| Language | TypeScript 5 |
+| Styling | Tailwind CSS v4 |
+| Linting | ESLint 9 |
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- npm (or yarn / pnpm / bun)
+
+### Installation
+
+```bash
+git clone <repo-url>
+cd speed-lines
+npm install
+```
+
+### Development
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to see the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Production Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+### Lint
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run lint
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+speed-lines/
+├── public/                        # Static assets
+├── src/
+│   ├── app/
+│   │   ├── globals.css            # Tailwind import, custom classes & keyframes
+│   │   ├── layout.tsx             # Root layout with metadata and fonts
+│   │   └── page.tsx               # Main page — wires config state to components
+│   └── components/
+│       ├── ControlPanel.tsx       # Right-side collapsible settings panel
+│       ├── HeroSection.tsx        # Text overlay with heading, subtext, CTA, grid & glow
+│       └── SpeedLinesBackground.tsx  # SVG speed-lines renderer with animations
+├── eslint.config.mjs
+├── next.config.ts
+├── postcss.config.mjs
+├── tsconfig.json
+└── package.json
+```
 
-## Deploy on Vercel
+## How It Works
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**SpeedLinesBackground** renders SVG beams that curve from the left and right edges toward a configurable center gap. Beams use gradient strokes that fade toward the center. A seeded pseudo-random number generator ensures layouts are deterministic and reproducible.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+A subset of beams can be animated with dashed "particle" trails using CSS keyframes. Additional layers include edge glow (radial gradients on left/right), a vignette overlay, and optional accent beams with separate styling.
+
+**ControlPanel** is a glassmorphism sidebar with collapsible sections for every parameter group — beams, colors, stroke, animation, glow & effects, accent beams, text overlay, center glow, grid, and seed. It also provides download/upload, randomize, and reset actions.
+
+**HeroSection** renders an optional overlay with a heading, subtext, and CTA button. It supports a center radial glow and an orthogonal SVG grid with a fade mask.
+
+## Configuration Sections
+
+| Section | Controls |
+| --- | --- |
+| Beams | Count, convergence gap, top/bottom spread |
+| Colors | Background color, beam color palette (add/remove/edit) |
+| Stroke | Width, opacity, glow blur |
+| Animation | Chance, speed, dash pattern |
+| Glow & Effects | Vignette, edge glow |
+| Accent Beams | Toggle, count, width, opacity |
+| Text Overlay | Heading, subtext, CTA label & URL |
+| Center Glow | Inner/outer color, size |
+| Grid | Toggle, color, opacity, spacing |
+| Seed | Numeric seed for deterministic randomness |
+
+## License
+
+MIT
