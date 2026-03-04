@@ -437,10 +437,45 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ config, onChange }) => {
   }, [config, onChange]);
 
   const handleReset = useCallback(() => onChange({ ...DEFAULT_CONFIG }), [onChange]);
-  const handleRandomize = useCallback(
-    () => onChange({ ...config, seed: Math.floor(Math.random() * 999999) }),
-    [config, onChange]
-  );
+
+  const handleRandomize = useCallback(() => {
+    const rand = (min: number, max: number, step: number) => {
+      const steps = Math.round((max - min) / step);
+      return min + Math.floor(Math.random() * (steps + 1)) * step;
+    };
+
+    const opacityMin = rand(0, 1, 0.01);
+    const opacityMax = Math.max(opacityMin, rand(0, 1, 0.01));
+    const strokeWidthMin = rand(0.1, 8, 0.1);
+    const strokeWidthMax = Math.max(strokeWidthMin, rand(0.1, 8, 0.1));
+    const animationSpeedMin = rand(0.5, 20, 0.5);
+    const animationSpeedMax = Math.max(animationSpeedMin, rand(0.5, 20, 0.5));
+
+    onChange({
+      ...config,
+      seed: Math.floor(Math.random() * 999999),
+      numBeams: rand(1, 80, 1),
+      outerVerticalSpread: rand(0.2, 3, 0.05),
+      opacityMin,
+      opacityMax,
+      strokeWidthMin,
+      strokeWidthMax,
+      glowBlur: rand(0, 20, 0.5),
+      animationChance: rand(0, 1, 0.01),
+      animationSpeedMin,
+      animationSpeedMax,
+      dashLength: rand(5, 200, 5),
+      dashGap: rand(100, 3000, 50),
+      particleExtraWidth: rand(0, 5, 0.1),
+      showEdgeGlow: Math.random() > 0.5,
+      edgeGlowOpacity: rand(0, 0.5, 0.01),
+      showVignette: Math.random() > 0.5,
+      vignetteOpacity: rand(0, 1, 0.01),
+      showAccentBeams: Math.random() > 0.5,
+      accentOpacity: rand(0, 1, 0.01),
+      accentStrokeWidth: rand(0.5, 8, 0.1),
+    });
+  }, [config, onChange]);
   const handleToggleSidebar = useCallback(() => setIsOpen((p) => !p), []);
 
   const handleUploadClick = useCallback(() => {
@@ -555,7 +590,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ config, onChange }) => {
               </div>
               <div className="flex flex-wrap gap-[10px]">
                 {config.beamColors.map((color, i) => (
-                  <ColorChip key={`${i}-${color}`} color={color} onChange={(v) => handleColorChange(i, v)} onRemove={() => handleColorRemove(i)} />
+                  <ColorChip key={i} color={color} onChange={(v) => handleColorChange(i, v)} onRemove={() => handleColorRemove(i)} />
                 ))}
               </div>
             </div>
@@ -644,7 +679,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ config, onChange }) => {
         </div>
 
         {/* Footer actions */}
-        <div className="border-t border-white/4 p-[20px] flex flex-col gap-[10px]">
+        <div className="border-t border-white/4 p-[20px] flex flex-col gap-[10px] backdrop-blur-[8px]">
           <button
             type="button"
             onClick={() => handleDownloadConfig(config)}
