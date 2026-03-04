@@ -21,7 +21,7 @@ const Section: React.FC<SectionProps> = ({ title, defaultOpen = true, children }
   const handleToggle = useCallback(() => setIsOpen((p) => !p), []);
 
   return (
-    <div className="border-b border-white/4 mb-2.5">
+    <div className="border-b border-white/4 mt-2.5 mb-2.5">
       <button
         type="button"
         onClick={handleToggle}
@@ -46,7 +46,7 @@ const Section: React.FC<SectionProps> = ({ title, defaultOpen = true, children }
         style={{ gridTemplateRows: isOpen ? "1fr" : "0fr" }}
       >
         <div className="overflow-hidden">
-          <div className="flex flex-col gap-4 px-2.5 pb-[15px] mb-[15px]">{children}</div>
+          <div className="flex flex-col gap-4 px-2.5 pt-[10px] pb-5 mb-[15px]">{children}</div>
         </div>
       </div>
     </div>
@@ -74,10 +74,10 @@ const Slider: React.FC<SliderProps> = ({ label, value, min, max, step, onChange,
   const pct = ((value - min) / (max - min)) * 100;
 
   return (
-    <div className="flex flex-col gap-2 px-2.5 mb-[15px]">
+    <div className="flex flex-col gap-2 px-2.5 pt-[10px] pb-5 mb-[15px]">
       <div className="flex items-baseline justify-between">
-        <span className="text-[11px] font-medium text-white/30">{label}</span>
-        <span className="text-[11px] tabular-nums text-white/50">
+        <span className="text-[12px] font-medium text-white/40">{label}</span>
+        <span className="text-[12px] tabular-nums text-white/50">
           {step < 1 ? value.toFixed(2) : value}
           {suffix}
         </span>
@@ -119,7 +119,7 @@ const Toggle: React.FC<ToggleProps> = ({ label, value, onChange }) => {
 
   return (
     <div className="flex items-center justify-between">
-      <span className="text-[11px] font-medium text-white/30">{label}</span>
+      <span className="text-[12px] font-medium text-white">{label}</span>
       <button
         type="button"
         role="switch"
@@ -160,9 +160,9 @@ const ColorInput: React.FC<ColorInputProps> = ({ label, value, onChange }) => {
 
   return (
     <div className="flex items-center justify-between">
-      <span className="text-[11px] font-medium text-white/30">{label}</span>
+      <span className="text-[12px] font-medium text-white/40">{label}</span>
       <div className="flex items-center gap-2.5">
-        <span className="text-[10px] tabular-nums text-white/25 uppercase">{value}</span>
+        <span className="text-[12px] tabular-nums text-white/25 uppercase">{value}</span>
         <label className="relative cursor-pointer">
           <span
             className="block h-6 w-6 rounded-md border border-white/10 shadow-sm"
@@ -446,7 +446,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ config, onChange }) => {
         aria-label="Speed Lines Control Panel"
       >
         {/* Header */}
-        <div className="border-b border-white/4 px-6 py-5">
+        <div className="border-b border-white/4 px-5 py-[15px]">
           <h2 className="text-[20px] font-semibold text-white/75 tracking-wide p-[15px]">Controls</h2>
           <p className="px-[15px] text-[11px] text-white/25">
             Made by{" "}
@@ -486,7 +486,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ config, onChange }) => {
           <Section title="Colors">
             <div className="flex flex-col gap-3">
               <div className="flex items-center justify-between">
-                <span className="text-[11px] font-medium text-white/30">Beam palette</span>
+                <span className="text-[12px] font-medium text-white/40">Beam palette</span>
                 <button
                   type="button"
                   onClick={handleAddColor}
