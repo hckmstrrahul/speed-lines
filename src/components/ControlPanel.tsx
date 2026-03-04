@@ -441,7 +441,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ config, onChange }) => {
 
       {/* Sidebar */}
       <aside
-        className={`panel-glass fixed top-0 right-0 z-40 flex h-full w-[340px] flex-col transition-transform duration-300 ease-out ${
+        className={`panel-glass fixed top-0 right-0 z-40 flex h-full w-[340px] flex-col transition-transform duration-300 ease-out backdrop-blur-[10px] ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
         aria-label="Speed Lines Control Panel"
