@@ -13,26 +13,27 @@ type ControlPanelProps = {
 type SectionProps = {
   title: string;
   defaultOpen?: boolean;
+  contentClassName?: string;
   children: React.ReactNode;
 };
 
-const Section: React.FC<SectionProps> = ({ title, defaultOpen = true, children }) => {
+const Section: React.FC<SectionProps> = ({ title, defaultOpen = true, contentClassName, children }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
   const handleToggle = useCallback(() => setIsOpen((p) => !p), []);
 
   return (
-    <div className="border-b border-white/4 mt-2.5 mb-2.5">
+    <div className="border-b border-white/4 mt-[10px] mb-[10px]">
       <button
         type="button"
         onClick={handleToggle}
-        className="group flex w-full items-center justify-between px-6 py-2.5 cursor-pointer my-[15px]"
+        className="group flex w-full items-center justify-between px-[10px] py-[10px] cursor-pointer mt-[10px] mb-0"
         aria-expanded={isOpen}
       >
         <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white transition-colors group-hover:text-white/65">
           {title}
         </span>
         <svg
-          className={`h-3 w-3 text-white/20 transition-transform duration-200 group-hover:text-white/40 ${isOpen ? "rotate-0" : "-rotate-90"}`}
+          className={`h-[12px] w-[12px] text-white/20 transition-transform duration-200 group-hover:text-white/40 ${isOpen ? "rotate-0" : "-rotate-90"}`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -46,7 +47,7 @@ const Section: React.FC<SectionProps> = ({ title, defaultOpen = true, children }
         style={{ gridTemplateRows: isOpen ? "1fr" : "0fr" }}
       >
         <div className="overflow-hidden">
-          <div className="flex flex-col gap-4 px-2.5 pt-[10px] pb-5 mb-[15px]">{children}</div>
+          <div className={`flex flex-col gap-0 px-[10px] pt-[10px] pb-[10px] mb-0 ${contentClassName ?? ""}`}>{children}</div>
         </div>
       </div>
     </div>
@@ -74,7 +75,7 @@ const Slider: React.FC<SliderProps> = ({ label, value, min, max, step, onChange,
   const pct = ((value - min) / (max - min)) * 100;
 
   return (
-    <div className="flex flex-col gap-2 px-2.5 pt-[10px] pb-5 mb-[15px]">
+    <div className="flex flex-col gap-[8px] px-[10px] pt-[5px] pb-[8px] mb-0">
       <div className="flex items-baseline justify-between">
         <span className="text-[12px] font-medium text-white/40">{label}</span>
         <span className="text-[12px] tabular-nums text-white/50">
@@ -82,10 +83,10 @@ const Slider: React.FC<SliderProps> = ({ label, value, min, max, step, onChange,
           {suffix}
         </span>
       </div>
-      <div className="relative flex items-center h-5">
-        <div className="absolute left-0 right-0 h-[3px] rounded-full bg-white/6" />
+      <div className="relative flex items-center h-[20px]">
+        <div className="absolute left-0 right-0 h-[3px] rounded-[9999px] bg-white/6" />
         <div
-          className="absolute left-0 h-[3px] rounded-full"
+          className="absolute left-0 h-[3px] rounded-[9999px]"
           style={{
             width: `${pct}%`,
             background: "linear-gradient(90deg, #308698, #BDED8F)",
@@ -118,7 +119,7 @@ const Toggle: React.FC<ToggleProps> = ({ label, value, onChange }) => {
   const handleToggle = useCallback(() => onChange(!value), [value, onChange]);
 
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center justify-between mb-[5px]">
       <span className="text-[12px] font-medium text-white">{label}</span>
       <button
         type="button"
@@ -126,14 +127,14 @@ const Toggle: React.FC<ToggleProps> = ({ label, value, onChange }) => {
         aria-checked={value}
         aria-label={label}
         onClick={handleToggle}
-        className={`relative h-[22px] w-10 rounded-full transition-colors duration-200 cursor-pointer ${
+        className={`relative h-[22px] w-[40px] rounded-[9999px] transition-colors duration-200 cursor-pointer ${
           value
             ? "bg-linear-to-r from-[#308698] to-[#5ab899]"
             : "bg-white/8"
         }`}
       >
         <span
-          className={`absolute top-[3px] left-[3px] h-4 w-4 rounded-full shadow-sm transition-transform duration-200 ${
+          className={`absolute top-[3px] left-[3px] h-[16px] w-[16px] rounded-[9999px] shadow-sm transition-transform duration-200 ${
             value
               ? "translate-x-[18px] bg-white"
               : "translate-x-0 bg-white/50"
@@ -159,13 +160,13 @@ const ColorInput: React.FC<ColorInputProps> = ({ label, value, onChange }) => {
   );
 
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center justify-between px-[10px]">
       <span className="text-[12px] font-medium text-white/40">{label}</span>
-      <div className="flex items-center gap-2.5">
+      <div className="flex items-center gap-[10px]">
         <span className="text-[12px] tabular-nums text-white/25 uppercase">{value}</span>
         <label className="relative cursor-pointer">
           <span
-            className="block h-6 w-6 rounded-md border border-white/10 shadow-sm"
+            className="block h-[24px] w-[24px] rounded-[6px] border border-white/10 shadow-sm"
             style={{ backgroundColor: value }}
           />
           <input
@@ -199,7 +200,7 @@ const ColorChip: React.FC<ColorChipProps> = ({ color, onRemove, onChange }) => {
     <div className="group relative">
       <label className="cursor-pointer">
         <span
-          className="block h-7 w-7 rounded-lg border border-white/10 shadow-sm transition-transform hover:scale-110"
+          className="block h-[28px] w-[28px] rounded-[8px] border border-white/10 shadow-sm transition-transform hover:scale-110"
           style={{ backgroundColor: color }}
         />
         <input
@@ -213,7 +214,7 @@ const ColorChip: React.FC<ColorChipProps> = ({ color, onRemove, onChange }) => {
       <button
         type="button"
         onClick={onRemove}
-        className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-black/80 text-[9px] leading-none text-white/50 opacity-0 ring-1 ring-white/10 transition-opacity group-hover:opacity-100 hover:bg-red-600 hover:text-white cursor-pointer"
+        className="absolute -top-[6px] -right-[6px] flex h-[16px] w-[16px] items-center justify-center rounded-[9999px] bg-black/80 text-[9px] leading-none text-white/50 opacity-0 ring-1 ring-white/10 transition-opacity group-hover:opacity-100 hover:bg-red-600 hover:text-white cursor-pointer"
         aria-label={`Remove color ${color}`}
       >
         &times;
@@ -421,11 +422,11 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ config, onChange }) => {
       <button
         type="button"
         onClick={handleToggleSidebar}
-        className="fixed top-4 right-4 z-50 flex h-9 w-9 items-center justify-center rounded-full bg-white/5 backdrop-blur-xl border border-white/7 text-white/50 transition-all duration-200 hover:bg-white/10 hover:text-white/80 hover:scale-105 active:scale-95 cursor-pointer"
+        className="fixed top-[16px] right-[16px] z-50 flex h-[36px] w-[36px] items-center justify-center rounded-[9999px] bg-white/5 backdrop-blur-xl border border-white/7 text-white/50 transition-all duration-200 hover:bg-white/10 hover:text-white/80 hover:scale-105 active:scale-95 cursor-pointer"
         aria-label={isOpen ? "Close control panel" : "Open control panel"}
         tabIndex={0}
       >
-        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <svg className="h-[16px] w-[16px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
           {isOpen ? (
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
           ) : (
@@ -446,9 +447,9 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ config, onChange }) => {
         aria-label="Speed Lines Control Panel"
       >
         {/* Header */}
-        <div className="border-b border-white/4 px-5 py-[15px]">
-          <h2 className="text-[20px] font-semibold text-white/75 tracking-wide p-[15px]">Controls</h2>
-          <p className="px-[15px] text-[11px] text-white/25">
+        <div className="border-b border-white/4 px-[20px] py-[10px]">
+          <h2 className="text-[20px] font-semibold text-white/75 tracking-wide pt-[15px] pb-0 px-0">Controls</h2>
+          <p className="px-0 text-[11px] text-white/25">
             Made by{" "}
             <a
               href="https://x.com/palakjain2701"
@@ -475,7 +476,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ config, onChange }) => {
         </div>
 
         {/* Scrollable content */}
-        <div className="flex-1 overflow-y-auto scrollbar-thin px-5 py-[15px]">
+        <div className="flex-1 overflow-y-auto scrollbar-thin px-[10px] py-[15px]">
           <Section title="Beams">
             <Slider label="Count" value={config.numBeams} min={1} max={80} step={1} onChange={(v) => handleUpdate("numBeams", v)} />
             <Slider label="Convergence gap" value={config.convergenceGap} min={0} max={0.4} step={0.01} onChange={(v) => handleUpdate("convergenceGap", v)} />
@@ -483,21 +484,21 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ config, onChange }) => {
             <Slider label="Outer vertical spread" value={config.outerVerticalSpread} min={0.2} max={3} step={0.05} onChange={(v) => handleUpdate("outerVerticalSpread", v)} suffix="x" />
           </Section>
 
-          <Section title="Colors">
-            <div className="flex flex-col gap-3">
+          <Section title="Colors" contentClassName="gap-[16px]">
+            <div className="flex flex-col gap-[12px] px-[10px]">
               <div className="flex items-center justify-between">
                 <span className="text-[12px] font-medium text-white/40">Beam palette</span>
                 <button
                   type="button"
                   onClick={handleAddColor}
-                  className="flex h-5 w-5 items-center justify-center rounded-md bg-white/6 text-[12px] leading-none text-white/40 transition-colors hover:bg-white/12 hover:text-white/70 cursor-pointer"
+                  className="flex h-[20px] w-[20px] items-center justify-center rounded-[6px] bg-white/6 text-[12px] leading-none text-white/40 transition-colors hover:bg-white/12 hover:text-white/70 cursor-pointer"
                   aria-label="Add color"
                   tabIndex={0}
                 >
                   +
                 </button>
               </div>
-              <div className="flex flex-wrap gap-2.5">
+              <div className="flex flex-wrap gap-[10px]">
                 {config.beamColors.map((color, i) => (
                   <ColorChip key={`${i}-${color}`} color={color} onChange={(v) => handleColorChange(i, v)} onRemove={() => handleColorRemove(i)} />
                 ))}
@@ -551,15 +552,15 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ config, onChange }) => {
         </div>
 
         {/* Footer actions */}
-        <div className="border-t border-white/4 p-5 flex flex-col gap-2.5">
+        <div className="border-t border-white/4 p-[20px] flex flex-col gap-[10px]">
           <button
             type="button"
             onClick={() => handleDownloadConfig(config)}
-            className="flex w-full items-center justify-center gap-2.5 rounded-full bg-linear-to-r from-[#308698]/20 to-[#BDED8F]/10 px-5 py-2.5 text-[12px] font-semibold uppercase tracking-widest text-white/65 ring-1 ring-inset ring-white/6 transition-all duration-200 hover:from-[#308698]/30 hover:to-[#BDED8F]/20 hover:text-white/85 active:scale-[0.98] cursor-pointer"
+            className="flex w-full items-center justify-center gap-[10px] rounded-[9999px] bg-linear-to-r from-[#308698]/20 to-[#BDED8F]/10 px-[20px] py-[10px] text-[12px] font-semibold uppercase tracking-widest text-white/65 ring-1 ring-inset ring-white/6 transition-all duration-200 hover:from-[#308698]/30 hover:to-[#BDED8F]/20 hover:text-white/85 active:scale-[0.98] cursor-pointer"
             aria-label="Download configuration"
             tabIndex={0}
           >
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <svg className="h-[16px] w-[16px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V3" />
             </svg>
             Download Config (.TXT)
@@ -575,24 +576,24 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ config, onChange }) => {
           <button
             type="button"
             onClick={handleUploadClick}
-            className="flex w-full items-center justify-center gap-2.5 rounded-full bg-white/4 px-5 py-2.5 text-[12px] font-semibold uppercase tracking-widest text-white/40 ring-1 ring-inset ring-white/6 transition-all duration-200 hover:bg-white/8 hover:text-white/65 active:scale-[0.98] cursor-pointer"
+            className="flex w-full items-center justify-center gap-[10px] rounded-[9999px] bg-white/4 px-[20px] py-[10px] text-[12px] font-semibold uppercase tracking-widest text-white/40 ring-1 ring-inset ring-white/6 transition-all duration-200 hover:bg-white/8 hover:text-white/65 active:scale-[0.98] cursor-pointer"
             aria-label="Upload configuration file"
             tabIndex={0}
           >
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <svg className="h-[16px] w-[16px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M16 8l-4-4m0 0L8 8m4-4v13" />
             </svg>
             Upload Config (.TXT)
           </button>
-          <div className="flex gap-2.5">
+          <div className="flex gap-[10px]">
             <button
               type="button"
               onClick={handleRandomize}
-              className="flex flex-1 items-center justify-center gap-2 rounded-full bg-white/4 px-4 py-2.5 text-[11px] font-semibold uppercase tracking-widest text-white/40 ring-1 ring-inset ring-white/4 transition-all duration-200 hover:bg-white/8 hover:text-white/65 active:scale-[0.98] cursor-pointer"
+              className="flex flex-1 items-center justify-center gap-[8px] rounded-[9999px] bg-white/4 px-[16px] py-[10px] text-[11px] font-semibold uppercase tracking-widest text-white/40 ring-1 ring-inset ring-white/4 transition-all duration-200 hover:bg-white/8 hover:text-white/65 active:scale-[0.98] cursor-pointer"
               aria-label="Randomize seed"
               tabIndex={0}
             >
-              <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg className="h-[14px] w-[14px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 00-3.7-3.7 48.678 48.678 0 00-7.324 0 4.006 4.006 0 00-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3l-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 003.7 3.7 48.656 48.656 0 007.324 0 4.006 4.006 0 003.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3l-3 3" />
               </svg>
               Randomize
@@ -600,11 +601,11 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ config, onChange }) => {
             <button
               type="button"
               onClick={handleReset}
-              className="flex flex-1 items-center justify-center gap-2 rounded-full bg-white/4 px-4 py-2.5 text-[11px] font-semibold uppercase tracking-widest text-white/40 ring-1 ring-inset ring-white/4 transition-all duration-200 hover:bg-red-500/15 hover:text-red-400 active:scale-[0.98] cursor-pointer"
+              className="flex flex-1 items-center justify-center gap-[8px] rounded-[9999px] bg-white/4 px-[16px] py-[10px] text-[11px] font-semibold uppercase tracking-widest text-white/40 ring-1 ring-inset ring-white/4 transition-all duration-200 hover:bg-red-500/15 hover:text-red-400 active:scale-[0.98] cursor-pointer"
               aria-label="Reset to defaults"
               tabIndex={0}
             >
-              <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg className="h-[14px] w-[14px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
               </svg>
               Reset
