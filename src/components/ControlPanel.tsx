@@ -448,6 +448,30 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ config, onChange }) => {
         {/* Header */}
         <div className="border-b border-white/4 px-6 py-5">
           <h2 className="text-[20px] font-semibold text-white/75 tracking-wide p-[15px]">Controls</h2>
+          <p className="px-[15px] text-[11px] text-white/25">
+            Made by{" "}
+            <a
+              href="https://x.com/palakjain2701"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white/40 underline decoration-white/15 underline-offset-2 transition-colors hover:text-white/65"
+              tabIndex={0}
+              aria-label="Palak on X"
+            >
+              Palak
+            </a>
+            ,{" "}
+            <a
+              href="https://x.com/hckmstrrahul"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white/40 underline decoration-white/15 underline-offset-2 transition-colors hover:text-white/65"
+              tabIndex={0}
+              aria-label="RCB on X"
+            >
+              RCB
+            </a>
+          </p>
         </div>
 
         {/* Scrollable content */}
