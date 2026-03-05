@@ -538,7 +538,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ config, onChange }) => {
       >
         {/* Header */}
         <div className="border-b border-white/4 px-[20px] py-[10px]">
-          <h2 className="text-[20px] font-semibold text-white/75 tracking-wide pt-[15px] pb-0 px-0">Controls</h2>
+          <h2 className="text-[20px] font-semibold text-white/75 tracking-wide pt-[15px] pb-0 px-0">Speed Lines</h2>
           <p className="px-0 text-[11px] text-white/25">
             Made by{" "}
             <a
