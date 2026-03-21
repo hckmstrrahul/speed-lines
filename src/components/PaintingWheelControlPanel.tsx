@@ -209,6 +209,7 @@ const handleDownloadConfig = (config: PaintingWheelConfig) => {
     "",
     "CAMERA & AXIS",
     `  perspective          : ${config.perspective}px`,
+    `  zoom                 : ${config.zoom}×`,
     `  tiltX                : ${config.tiltX}°`,
     `  tiltY                : ${config.tiltY}°`,
     `  tiltZ                : ${config.tiltZ}°`,
@@ -269,6 +270,7 @@ const parsePaintingWheelConfigFromText = (text: string): PaintingWheelConfig | n
 
     const numberKeys: (keyof PaintingWheelConfig)[] = [
       "perspective",
+      "zoom",
       "tiltX",
       "tiltY",
       "tiltZ",
@@ -438,6 +440,15 @@ const PaintingWheelControlPanel: React.FC<PaintingWheelControlPanelProps> = ({
               step={50}
               onChange={(v) => handleUpdate("perspective", v)}
               suffix="px"
+            />
+            <Slider
+              label="Viewport zoom"
+              value={config.zoom}
+              min={0.25}
+              max={3}
+              step={0.01}
+              onChange={(v) => handleUpdate("zoom", v)}
+              suffix="×"
             />
             <Slider
               label="Tilt X (up / down)"

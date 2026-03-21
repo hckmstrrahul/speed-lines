@@ -5,6 +5,8 @@ import { buildPaintingWheelCardImageSrcs } from "@/lib/paintingWheelPlaceholders
 
 export type PaintingWheelConfig = {
   perspective: number;
+  /** Viewport zoom: scales the whole 3D scene (1 = 100%) */
+  zoom: number;
   tiltX: number;
   tiltY: number;
   tiltZ: number;
@@ -30,6 +32,7 @@ export type PaintingWheelConfig = {
 
 export const DEFAULT_PAINTING_WHEEL_CONFIG: PaintingWheelConfig = {
   perspective: 3000,
+  zoom: 1.4,
   tiltX: -17,
   tiltY: -26,
   tiltZ: 22,
@@ -55,9 +58,10 @@ export const DEFAULT_PAINTING_WHEEL_CONFIG: PaintingWheelConfig = {
 
 const CAMERA_RESET: Pick<
   PaintingWheelConfig,
-  "perspective" | "tiltX" | "tiltY" | "tiltZ" | "panX" | "panY"
+  "perspective" | "zoom" | "tiltX" | "tiltY" | "tiltZ" | "panX" | "panY"
 > = {
   perspective: DEFAULT_PAINTING_WHEEL_CONFIG.perspective,
+  zoom: DEFAULT_PAINTING_WHEEL_CONFIG.zoom,
   tiltX: DEFAULT_PAINTING_WHEEL_CONFIG.tiltX,
   tiltY: DEFAULT_PAINTING_WHEEL_CONFIG.tiltY,
   tiltZ: DEFAULT_PAINTING_WHEEL_CONFIG.tiltZ,
@@ -320,12 +324,26 @@ const PaintingWheelBackground: React.FC<PaintingWheelBackgroundProps> = ({
       <div
         className="flex h-full w-full items-center justify-center"
         style={{
-          perspective: `${config.perspective}px`,
-          transition: isResetting
-            ? "perspective 2s cubic-bezier(0.4, 0, 0.2, 1)"
-            : "perspective 0.15s ease-out",
+          width: "100%",
+          height: "100%",
+          transform: `scale(${config.zoom})`,
+          transformOrigin: "center center",
+          transition: isDragging
+            ? "none"
+            : isResetting
+              ? "transform 2s cubic-bezier(0.4, 0, 0.2, 1)"
+              : "transform 0.15s ease-out",
         }}
       >
+        <div
+          className="flex h-full w-full items-center justify-center"
+          style={{
+            perspective: `${config.perspective}px`,
+            transition: isResetting
+              ? "perspective 2s cubic-bezier(0.4, 0, 0.2, 1)"
+              : "perspective 0.15s ease-out",
+          }}
+        >
         <div
           className="relative flex items-center justify-center"
           style={{
@@ -370,6 +388,7 @@ const PaintingWheelBackground: React.FC<PaintingWheelBackgroundProps> = ({
               />
             ))}
           </div>
+        </div>
         </div>
       </div>
     </div>
