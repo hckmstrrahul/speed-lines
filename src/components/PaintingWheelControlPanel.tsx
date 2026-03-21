@@ -361,6 +361,8 @@ const PaintingWheelControlPanel: React.FC<PaintingWheelControlPanelProps> = ({
       reverse: Math.random() > 0.5,
       paused: false,
       imageSeed: rand(1, 900, 1),
+      perspective: config.perspective,
+      zoom: config.zoom,
     });
   }, [config, onChange]);
 
