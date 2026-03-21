@@ -334,28 +334,7 @@ const WaveControlPanel: React.FC<WaveControlPanelProps> = ({ config, onChange })
         <div className="border-b border-white/4 px-[20px] py-[10px]">
           <h2 className="text-[20px] font-semibold text-white/75 tracking-wide pt-[15px] pb-0 px-0">Pixel Wave</h2>
           <p className="px-0 text-[11px] text-white/25">
-            Made by{" "}
-            <a
-              href="https://x.com/palakjain2701"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-white/40 underline decoration-white/15 underline-offset-2 transition-colors hover:text-white/65"
-              tabIndex={0}
-              aria-label="Palak on X"
-            >
-              Palak
-            </a>
-            ,{" "}
-            <a
-              href="https://x.com/hckmstrrahul"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-white/40 underline decoration-white/15 underline-offset-2 transition-colors hover:text-white/65"
-              tabIndex={0}
-              aria-label="RCB on X"
-            >
-              RCB
-            </a>
+            Floating pixel grid with cursor-driven waves, ripples, and depth
           </p>
         </div>
 

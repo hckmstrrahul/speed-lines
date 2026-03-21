@@ -153,6 +153,15 @@ input[type="color"]::-moz-color-swatch {
   }
 }
 
+@keyframes painting-wheel-spin {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(360deg);
+  }
+}
+
 @keyframes glow-from-right {
   0% {
     transform: translateX(100%);

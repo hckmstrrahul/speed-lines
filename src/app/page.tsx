@@ -12,13 +12,21 @@ import PixelWaveBackground, {
   DEFAULT_WAVE_CONFIG,
 } from "@/components/PixelWaveBackground";
 import WaveControlPanel from "@/components/WaveControlPanel";
+import PaintingWheelBackground, {
+  type PaintingWheelConfig,
+  DEFAULT_PAINTING_WHEEL_CONFIG,
+} from "@/components/PaintingWheelBackground";
+import PaintingWheelControlPanel from "@/components/PaintingWheelControlPanel";
 
-type ActiveTab = 1 | 2;
+type ActiveTab = 1 | 2 | 3;
 
 const Home = () => {
   const [activeTab, setActiveTab] = useState<ActiveTab>(1);
   const [config, setConfig] = useState<SpeedLinesConfig>(DEFAULT_CONFIG);
   const [waveConfig, setWaveConfig] = useState<PixelWaveConfig>(DEFAULT_WAVE_CONFIG);
+  const [paintingWheelConfig, setPaintingWheelConfig] = useState<PaintingWheelConfig>(
+    DEFAULT_PAINTING_WHEEL_CONFIG
+  );
 
   const handleConfigChange = useCallback((newConfig: SpeedLinesConfig) => {
     setConfig(newConfig);
@@ -28,6 +36,10 @@ const Home = () => {
     setWaveConfig(newConfig);
   }, []);
 
+  const handlePaintingWheelConfigChange = useCallback((newConfig: PaintingWheelConfig) => {
+    setPaintingWheelConfig(newConfig);
+  }, []);
+
   const handleTabSwitch = useCallback((tab: ActiveTab) => {
     setActiveTab(tab);
   }, []);
@@ -35,7 +47,10 @@ const Home = () => {
   return (
     <main
       className="relative min-h-screen overflow-hidden"
-      style={{ backgroundColor: activeTab === 1 ? config.backgroundColor : "#030303" }}
+      style={{
+        backgroundColor:
+          activeTab === 1 ? config.backgroundColor : activeTab === 2 ? "#030303" : "#050505",
+      }}
     >
       {/* Tab Switcher — circular pill at top center */}
       <div className="fixed top-[16px] left-1/2 -translate-x-1/2 z-50 flex items-center gap-[2px] rounded-[9999px] bg-white/5 backdrop-blur-xl border border-white/7 p-[3px]">
@@ -67,6 +82,20 @@ const Home = () => {
         >
           2
         </button>
+        <button
+          type="button"
+          onClick={() => handleTabSwitch(3)}
+          className={`relative flex h-[30px] w-[30px] items-center justify-center rounded-[9999px] text-[12px] font-semibold transition-all duration-200 cursor-pointer ${
+            activeTab === 3
+              ? "bg-white/12 text-white shadow-sm"
+              : "text-white/35 hover:text-white/60"
+          }`}
+          aria-label="Painting Wheel effect"
+          aria-pressed={activeTab === 3}
+          tabIndex={0}
+        >
+          3
+        </button>
       </div>
 
       {/* Tab 1: Speed Lines */}
@@ -87,6 +116,22 @@ const Home = () => {
             <PixelWaveBackground config={waveConfig} onConfigChange={handleWaveConfigChange} />
           </div>
           <WaveControlPanel config={waveConfig} onChange={handleWaveConfigChange} />
+        </>
+      )}
+
+      {/* Tab 3: Painting Wheel */}
+      {activeTab === 3 && (
+        <>
+          <div className="absolute inset-0">
+            <PaintingWheelBackground
+              config={paintingWheelConfig}
+              onConfigChange={handlePaintingWheelConfigChange}
+            />
+          </div>
+          <PaintingWheelControlPanel
+            config={paintingWheelConfig}
+            onChange={handlePaintingWheelConfigChange}
+          />
         </>
       )}
     </main>
