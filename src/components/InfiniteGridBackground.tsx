@@ -18,6 +18,8 @@ const buildVignetteGradient = (innerPct: number, sizePct: number, color: string)
 export type InfiniteGridConfig = {
   tileWidth: number;
   tileHeight: number;
+  /** Corner radius of each tile (px). */
+  tileBorderRadius: number;
   gap: number;
   hoverRadius: number;
   maxScale: number;
@@ -39,14 +41,15 @@ export type InfiniteGridConfig = {
 };
 
 export const DEFAULT_INFINITE_GRID_CONFIG: InfiniteGridConfig = {
-  tileWidth: 125,
+  tileWidth: 100,
   tileHeight: 80,
-  gap: 16,
-  hoverRadius: 350,
-  maxScale: 2.2,
-  pushForce: 40,
-  panSpeedX: 0.8,
-  panSpeedY: 0.3,
+  tileBorderRadius: 16,
+  gap: 20,
+  hoverRadius: 382,
+  maxScale: 1.4,
+  pushForce: 20,
+  panSpeedX: 0,
+  panSpeedY: 0.8,
   panPaused: false,
   vignetteEnabled: true,
   vignetteColor: "#0a0a0a",
@@ -271,10 +274,11 @@ const InfiniteGridBackground: React.FC<InfiniteGridBackgroundProps> = ({ config 
           ref={(el) => {
             tileRefs.current[i] = el;
           }}
-          className="pointer-events-none absolute top-0 left-0 origin-center overflow-hidden rounded-2xl bg-neutral-900 shadow-2xl will-change-transform"
+          className="pointer-events-none absolute top-0 left-0 origin-center overflow-hidden bg-neutral-900 shadow-2xl will-change-transform"
           style={{
             width: cfg.tileWidth,
             height: cfg.tileHeight,
+            borderRadius: cfg.tileBorderRadius,
             transform: "translate3d(-9999px, -9999px, 0) scale(0)",
           }}
         >

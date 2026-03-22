@@ -175,6 +175,7 @@ const handleDownloadConfig = (config: InfiniteGridConfig) => {
     "GRID",
     `  tileWidth            : ${config.tileWidth}px`,
     `  tileHeight           : ${config.tileHeight}px`,
+    `  tileBorderRadius     : ${config.tileBorderRadius}px`,
     `  gap                  : ${config.gap}px`,
     `  tileIconSeed         : ${config.tileIconSeed}`,
     "",
@@ -226,6 +227,7 @@ const parseInfiniteGridConfigFromText = (text: string): InfiniteGridConfig | nul
     const numberKeys: (keyof InfiniteGridConfig)[] = [
       "tileWidth",
       "tileHeight",
+      "tileBorderRadius",
       "gap",
       "hoverRadius",
       "maxScale",
@@ -288,6 +290,7 @@ const InfiniteGridControlPanel: React.FC<InfiniteGridControlPanelProps> = ({ con
       ...config,
       tileWidth: rand(10, 300, 1),
       tileHeight: rand(10, 300, 1),
+      tileBorderRadius: rand(0, 48, 1),
       gap: rand(0, 50, 1),
       hoverRadius: rand(100, 800, 1),
       maxScale: parseFloat(rand(1, 4, 0.1).toFixed(1)),
@@ -382,6 +385,15 @@ const InfiniteGridControlPanel: React.FC<InfiniteGridControlPanelProps> = ({ con
               max={300}
               step={1}
               onChange={(v) => handleUpdate("tileHeight", v)}
+              suffix="px"
+            />
+            <Slider
+              label="Tile corner radius"
+              value={config.tileBorderRadius}
+              min={0}
+              max={64}
+              step={1}
+              onChange={(v) => handleUpdate("tileBorderRadius", v)}
               suffix="px"
             />
             <Slider label="Gap" value={config.gap} min={0} max={50} step={1} onChange={(v) => handleUpdate("gap", v)} suffix="px" />
