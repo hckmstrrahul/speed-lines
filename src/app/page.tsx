@@ -17,8 +17,13 @@ import PaintingWheelBackground, {
   DEFAULT_PAINTING_WHEEL_CONFIG,
 } from "@/components/PaintingWheelBackground";
 import PaintingWheelControlPanel from "@/components/PaintingWheelControlPanel";
+import InfiniteGridBackground, {
+  type InfiniteGridConfig,
+  DEFAULT_INFINITE_GRID_CONFIG,
+} from "@/components/InfiniteGridBackground";
+import InfiniteGridControlPanel from "@/components/InfiniteGridControlPanel";
 
-type ActiveTab = 1 | 2 | 3;
+type ActiveTab = 1 | 2 | 3 | 4;
 
 const Home = () => {
   const [activeTab, setActiveTab] = useState<ActiveTab>(1);
@@ -26,6 +31,9 @@ const Home = () => {
   const [waveConfig, setWaveConfig] = useState<PixelWaveConfig>(DEFAULT_WAVE_CONFIG);
   const [paintingWheelConfig, setPaintingWheelConfig] = useState<PaintingWheelConfig>(
     DEFAULT_PAINTING_WHEEL_CONFIG
+  );
+  const [infiniteGridConfig, setInfiniteGridConfig] = useState<InfiniteGridConfig>(
+    DEFAULT_INFINITE_GRID_CONFIG
   );
 
   const handleConfigChange = useCallback((newConfig: SpeedLinesConfig) => {
@@ -40,6 +48,10 @@ const Home = () => {
     setPaintingWheelConfig(newConfig);
   }, []);
 
+  const handleInfiniteGridConfigChange = useCallback((newConfig: InfiniteGridConfig) => {
+    setInfiniteGridConfig(newConfig);
+  }, []);
+
   const handleTabSwitch = useCallback((tab: ActiveTab) => {
     setActiveTab(tab);
   }, []);
@@ -49,7 +61,13 @@ const Home = () => {
       className="relative min-h-screen overflow-hidden"
       style={{
         backgroundColor:
-          activeTab === 1 ? config.backgroundColor : activeTab === 2 ? "#030303" : "#050505",
+          activeTab === 1
+            ? config.backgroundColor
+            : activeTab === 2
+              ? "#030303"
+              : activeTab === 3
+                ? "#050505"
+                : infiniteGridConfig.vignetteColor,
       }}
     >
       {/* Tab Switcher — circular pill at top center */}
@@ -96,6 +114,20 @@ const Home = () => {
         >
           3
         </button>
+        <button
+          type="button"
+          onClick={() => handleTabSwitch(4)}
+          className={`relative flex h-[30px] w-[30px] items-center justify-center rounded-[9999px] text-[12px] font-semibold transition-all duration-200 cursor-pointer ${
+            activeTab === 4
+              ? "bg-white/12 text-white shadow-sm"
+              : "text-white/35 hover:text-white/60"
+          }`}
+          aria-label="Infinite Grid effect"
+          aria-pressed={activeTab === 4}
+          tabIndex={0}
+        >
+          4
+        </button>
       </div>
 
       {/* Tab 1: Speed Lines */}
@@ -132,6 +164,16 @@ const Home = () => {
             config={paintingWheelConfig}
             onChange={handlePaintingWheelConfigChange}
           />
+        </>
+      )}
+
+      {/* Tab 4: Infinite Grid */}
+      {activeTab === 4 && (
+        <>
+          <div className="absolute inset-0">
+            <InfiniteGridBackground config={infiniteGridConfig} />
+          </div>
+          <InfiniteGridControlPanel config={infiniteGridConfig} onChange={handleInfiniteGridConfigChange} />
         </>
       )}
     </main>
