@@ -1,11 +1,14 @@
 "use client";
 
 import React, { useState, useCallback, useRef } from "react";
-import { type SpeedLinesConfig, DEFAULT_CONFIG } from "./SpeedLinesBackground";
+import {
+  type MusicLinesConfig,
+  DEFAULT_MUSIC_LINES_CONFIG,
+} from "./MusicLinesBackground";
 
-type ControlPanelProps = {
-  config: SpeedLinesConfig;
-  onChange: (config: SpeedLinesConfig) => void;
+type MusicLinesControlPanelProps = {
+  config: MusicLinesConfig;
+  onChange: (config: MusicLinesConfig) => void;
 };
 
 /* ─── Collapsible Section ─── */
@@ -182,47 +185,6 @@ const ColorInput: React.FC<ColorInputProps> = ({ label, value, onChange }) => {
   );
 };
 
-/* ─── Color Chip ─── */
-
-type ColorChipProps = {
-  color: string;
-  onRemove: () => void;
-  onChange: (value: string) => void;
-};
-
-const ColorChip: React.FC<ColorChipProps> = ({ color, onRemove, onChange }) => {
-  const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value),
-    [onChange]
-  );
-
-  return (
-    <div className="group relative">
-      <label className="cursor-pointer">
-        <span
-          className="block h-[28px] w-[28px] rounded-[8px] border border-white/10 shadow-sm transition-transform hover:scale-110"
-          style={{ backgroundColor: color }}
-        />
-        <input
-          type="color"
-          value={color}
-          onChange={handleChange}
-          className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
-          aria-label={`Beam color ${color}`}
-        />
-      </label>
-      <button
-        type="button"
-        onClick={onRemove}
-        className="absolute -top-[6px] -right-[6px] flex h-[16px] w-[16px] items-center justify-center rounded-[9999px] bg-black/80 text-[9px] leading-none text-white/50 opacity-0 ring-1 ring-white/10 transition-opacity group-hover:opacity-100 hover:bg-red-600 hover:text-white cursor-pointer"
-        aria-label={`Remove color ${color}`}
-      >
-        &times;
-      </button>
-    </div>
-  );
-};
-
 /* ─── Text Input ─── */
 
 type TextInputProps = {
@@ -253,76 +215,32 @@ const TextInput: React.FC<TextInputProps> = ({ label, value, onChange }) => {
 
 /* ─── Download Config ─── */
 
-const handleDownloadConfig = (config: SpeedLinesConfig) => {
+const handleDownloadConfig = (config: MusicLinesConfig) => {
   const lines = [
     "┌─────────────────────────────────────────┐",
-    "│   Speed Lines — Configuration Export     │",
+    "│   Music Lines — Configuration Export     │",
     `│   ${new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}                       │`,
     "└─────────────────────────────────────────┘",
     "",
-    "BEAMS",
-    `  numBeams             : ${config.numBeams}`,
-    `  convergenceGap       : ${config.convergenceGap}`,
-    `  verticalSpread       : ${config.verticalSpread}`,
-    `  outerVerticalSpread  : ${config.outerVerticalSpread}`,
+    "EQUALIZER",
+    `  barCount             : ${config.barCount}`,
+    `  barWidthPercent      : ${config.barWidthPercent}%`,
+    `  barGap               : ${config.barGap}px`,
+    `  barBorderRadius      : ${config.barBorderRadius}px`,
+    `  minHeight            : ${config.minHeight}px`,
+    `  maxHeight            : ${config.maxHeight}px`,
+    "",
+    "MOTION",
+    `  speed                : ${config.speed}x`,
+    `  pulseFreq            : ${config.pulseFreq}`,
+    `  chaos                : ${config.chaos}`,
+    `  waveFreq             : ${config.waveFreq}`,
     "",
     "COLORS",
-    `  beamColors           : ${JSON.stringify(config.beamColors)}`,
-    `  accentColor          : ${config.accentColor}`,
+    `  colorSharpness       : ${config.colorSharpness}`,
+    `  colorOrange          : ${config.colorOrange}`,
+    `  colorBlue            : ${config.colorBlue}`,
     `  backgroundColor      : ${config.backgroundColor}`,
-    "",
-    "STROKE",
-    `  opacityMin           : ${config.opacityMin}`,
-    `  opacityMax           : ${config.opacityMax}`,
-    `  strokeWidthMin       : ${config.strokeWidthMin}`,
-    `  strokeWidthMax       : ${config.strokeWidthMax}`,
-    "",
-    "ANIMATION",
-    `  animationChance      : ${config.animationChance}`,
-    `  animationSpeedMin    : ${config.animationSpeedMin}s`,
-    `  animationSpeedMax    : ${config.animationSpeedMax}s`,
-    `  dashLength           : ${config.dashLength}px`,
-    `  dashGap              : ${config.dashGap}px`,
-    `  particleExtraWidth   : ${config.particleExtraWidth}px`,
-    "",
-    "GLOW & EFFECTS",
-    `  glowBlur             : ${config.glowBlur}px`,
-    `  showEdgeGlow         : ${config.showEdgeGlow}`,
-    `  edgeGlowOpacity      : ${config.edgeGlowOpacity}`,
-    `  showVignette         : ${config.showVignette}`,
-    `  vignetteOpacity      : ${config.vignetteOpacity}`,
-    "",
-    "ACCENT BEAMS",
-    `  showAccentBeams      : ${config.showAccentBeams}`,
-    `  accentOpacity        : ${config.accentOpacity}`,
-    `  accentStrokeWidth    : ${config.accentStrokeWidth}px`,
-    "",
-    "TEXT OVERLAY",
-    `  showOverlay          : ${config.showOverlay}`,
-    `  overlayHeading       : ${config.overlayHeading}`,
-    `  overlaySubtext       : ${config.overlaySubtext}`,
-    `  overlayButtonText    : ${config.overlayButtonText}`,
-    `  overlayButtonUrl     : ${config.overlayButtonUrl}`,
-    `  overlayY             : ${config.overlayY}px`,
-    "",
-    "CENTER GLOW",
-    `  showCenterGlow       : ${config.showCenterGlow}`,
-    `  centerGlowRadius     : ${config.centerGlowRadius}px`,
-    `  centerGlowOpacity    : ${config.centerGlowOpacity}`,
-    `  centerGlowColor      : ${config.centerGlowColor}`,
-    `  centerGlowColorOuter : ${config.centerGlowColorOuter}`,
-    `  centerGlowY          : ${config.centerGlowY}px`,
-    "",
-    "GRID",
-    `  showGrid             : ${config.showGrid}`,
-    `  gridSize             : ${config.gridSize}px`,
-    `  gridOpacity          : ${config.gridOpacity}`,
-    `  gridColor            : ${config.gridColor}`,
-    "",
-    "CANVAS",
-    `  canvasWidth          : ${config.canvasWidth}`,
-    `  canvasHeight         : ${config.canvasHeight}`,
-    `  seed                 : ${config.seed}`,
     "",
     "─── RAW JSON ───",
     "",
@@ -333,7 +251,7 @@ const handleDownloadConfig = (config: SpeedLinesConfig) => {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `speed-lines-config-${Date.now()}.txt`;
+  a.download = `music-lines-config-${Date.now()}.txt`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -342,61 +260,54 @@ const handleDownloadConfig = (config: SpeedLinesConfig) => {
 
 /* ─── Parse Config from TXT ─── */
 
-const parseConfigFromText = (text: string): SpeedLinesConfig | null => {
+const parseConfigFromText = (text: string): MusicLinesConfig | null => {
   const jsonMarker = "─── RAW JSON ───";
   const markerIndex = text.indexOf(jsonMarker);
   if (markerIndex === -1) return null;
 
   const jsonStr = text.slice(markerIndex + jsonMarker.length).trim();
   try {
-    const parsed = JSON.parse(jsonStr);
-    const config: SpeedLinesConfig = { ...DEFAULT_CONFIG };
+    const parsed = JSON.parse(jsonStr) as Record<string, unknown>;
+    const next: MusicLinesConfig = { ...DEFAULT_MUSIC_LINES_CONFIG };
 
-    const numberKeys: (keyof SpeedLinesConfig)[] = [
-      "canvasWidth", "canvasHeight", "convergenceGap", "numBeams",
-      "opacityMin", "opacityMax", "strokeWidthMin", "strokeWidthMax",
-      "glowBlur", "animationSpeedMin", "animationSpeedMax", "animationChance",
-      "dashLength", "dashGap", "particleExtraWidth", "accentOpacity",
-      "accentStrokeWidth", "verticalSpread", "outerVerticalSpread",
+    const numberKeys: (keyof MusicLinesConfig)[] = [
+      "barCount", "barWidthPercent", "barGap", "barBorderRadius",
+      "minHeight", "maxHeight", "speed", "pulseFreq", "chaos",
+      "waveFreq", "colorSharpness",
       "edgeGlowOpacity", "vignetteOpacity", "seed",
       "centerGlowRadius", "centerGlowOpacity", "centerGlowY",
-      "gridSize", "gridOpacity", "overlayY",
+      "gridSize", "gridOpacity", "overlayY", "barsOffsetY", "barBaseOpacity",
     ];
 
-    const booleanKeys: (keyof SpeedLinesConfig)[] = [
-      "showAccentBeams", "showEdgeGlow", "showVignette",
-      "showOverlay", "showCenterGlow", "showGrid",
+    const booleanKeys: (keyof MusicLinesConfig)[] = [
+      "showEdgeGlow", "showVignette", "showOverlay", "showCenterGlow", "showGrid",
     ];
 
-    const stringKeys: (keyof SpeedLinesConfig)[] = [
-      "accentColor", "backgroundColor",
+    const stringKeys: (keyof MusicLinesConfig)[] = [
+      "colorOrange", "colorBlue", "backgroundColor", "barBaseColor",
       "overlayHeading", "overlaySubtext", "overlayButtonText", "overlayButtonUrl",
       "centerGlowColor", "centerGlowColorOuter", "gridColor",
     ];
 
     for (const key of numberKeys) {
       if (key in parsed && typeof parsed[key] === "number") {
-        (config as Record<string, unknown>)[key] = parsed[key];
+        (next as Record<string, unknown>)[key] = parsed[key];
       }
     }
 
     for (const key of booleanKeys) {
       if (key in parsed && typeof parsed[key] === "boolean") {
-        (config as Record<string, unknown>)[key] = parsed[key];
+        (next as Record<string, unknown>)[key] = parsed[key];
       }
     }
 
     for (const key of stringKeys) {
       if (key in parsed && typeof parsed[key] === "string") {
-        (config as Record<string, unknown>)[key] = parsed[key];
+        (next as Record<string, unknown>)[key] = parsed[key];
       }
     }
 
-    if (Array.isArray(parsed.beamColors) && parsed.beamColors.every((c: unknown) => typeof c === "string")) {
-      config.beamColors = parsed.beamColors;
-    }
-
-    return config;
+    return next;
   } catch {
     return null;
   }
@@ -404,39 +315,19 @@ const parseConfigFromText = (text: string): SpeedLinesConfig | null => {
 
 /* ─── Main Panel ─── */
 
-const ControlPanel: React.FC<ControlPanelProps> = ({ config, onChange }) => {
+const MusicLinesControlPanel: React.FC<MusicLinesControlPanelProps> = ({ config, onChange }) => {
   const [isOpen, setIsOpen] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleUpdate = useCallback(
-    <K extends keyof SpeedLinesConfig>(key: K, value: SpeedLinesConfig[K]) => {
+    <K extends keyof MusicLinesConfig>(key: K, value: MusicLinesConfig[K]) => {
       onChange({ ...config, [key]: value });
     },
     [config, onChange]
   );
 
-  const handleColorChange = useCallback(
-    (index: number, value: string) => {
-      const newColors = [...config.beamColors];
-      newColors[index] = value;
-      onChange({ ...config, beamColors: newColors });
-    },
-    [config, onChange]
-  );
-
-  const handleColorRemove = useCallback(
-    (index: number) => {
-      if (config.beamColors.length <= 1) return;
-      onChange({ ...config, beamColors: config.beamColors.filter((_, i) => i !== index) });
-    },
-    [config, onChange]
-  );
-
-  const handleAddColor = useCallback(() => {
-    onChange({ ...config, beamColors: [...config.beamColors, "#FFFFFF"] });
-  }, [config, onChange]);
-
-  const handleReset = useCallback(() => onChange({ ...DEFAULT_CONFIG }), [onChange]);
+  const handleReset = useCallback(() => onChange({ ...DEFAULT_MUSIC_LINES_CONFIG }), [onChange]);
+  const handleToggleSidebar = useCallback(() => setIsOpen((p) => !p), []);
 
   const handleRandomize = useCallback(() => {
     const rand = (min: number, max: number, step: number) => {
@@ -444,39 +335,31 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ config, onChange }) => {
       return min + Math.floor(Math.random() * (steps + 1)) * step;
     };
 
-    const opacityMin = rand(0, 1, 0.01);
-    const opacityMax = Math.max(opacityMin, rand(0, 1, 0.01));
-    const strokeWidthMin = rand(0.1, 8, 0.1);
-    const strokeWidthMax = Math.max(strokeWidthMin, rand(0.1, 8, 0.1));
-    const animationSpeedMin = rand(0.5, 20, 0.5);
-    const animationSpeedMax = Math.max(animationSpeedMin, rand(0.5, 20, 0.5));
+    const randColor = () => `#${Math.floor(Math.random() * 0xFFFFFF).toString(16).padStart(6, "0")}`;
+    const minH = rand(1, 1000, 1);
+    const maxH = Math.max(minH + 40, rand(40, 1000, 1));
 
     onChange({
       ...config,
       seed: Math.floor(Math.random() * 999999),
-      numBeams: rand(1, 80, 1),
-      outerVerticalSpread: rand(0.2, 3, 0.05),
-      opacityMin,
-      opacityMax,
-      strokeWidthMin,
-      strokeWidthMax,
-      glowBlur: rand(0, 20, 0.5),
-      animationChance: rand(0, 1, 0.01),
-      animationSpeedMin,
-      animationSpeedMax,
-      dashLength: rand(5, 200, 5),
-      dashGap: rand(100, 3000, 50),
-      particleExtraWidth: rand(0, 5, 0.1),
-      showEdgeGlow: Math.random() > 0.5,
-      edgeGlowOpacity: rand(0, 0.5, 0.01),
-      showVignette: Math.random() > 0.5,
-      vignetteOpacity: rand(0, 1, 0.01),
-      showAccentBeams: Math.random() > 0.5,
-      accentOpacity: rand(0, 1, 0.01),
-      accentStrokeWidth: rand(0.5, 8, 0.1),
+      barCount: rand(4, 400, 1),
+      barWidthPercent: rand(10, 100, 1),
+      barGap: rand(0, 200, 1),
+      barBorderRadius: rand(0, 16, 1),
+      minHeight: minH,
+      maxHeight: maxH,
+      barsOffsetY: rand(-500, 500, 1),
+      barBaseOpacity: parseFloat(rand(0, 1, 0.01).toFixed(2)),
+      barBaseColor: Math.random() > 0.5 ? randColor() : "",
+      speed: parseFloat(rand(0.1, 5, 0.1).toFixed(1)),
+      pulseFreq: parseFloat(rand(0.05, 3, 0.05).toFixed(2)),
+      chaos: parseFloat(rand(0, 1, 0.01).toFixed(2)),
+      waveFreq: parseFloat(rand(0.01, 1, 0.01).toFixed(2)),
+      colorSharpness: rand(1, 15, 1),
+      colorOrange: randColor(),
+      colorBlue: randColor(),
     });
   }, [config, onChange]);
-  const handleToggleSidebar = useCallback(() => setIsOpen((p) => !p), []);
 
   const handleUploadClick = useCallback(() => {
     fileInputRef.current?.click();
@@ -496,7 +379,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ config, onChange }) => {
         if (parsed) {
           onChange(parsed);
         } else {
-          alert("Could not parse config file. Make sure it was exported from Speed Lines.");
+          alert("Could not parse config file. Make sure it was exported from Music Lines.");
         }
       };
       reader.readAsText(file);
@@ -508,7 +391,6 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ config, onChange }) => {
 
   return (
     <>
-      {/* Toggle button */}
       <button
         type="button"
         onClick={handleToggleSidebar}
@@ -529,93 +411,47 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ config, onChange }) => {
         </svg>
       </button>
 
-      {/* Sidebar */}
       <aside
         className={`panel-glass fixed top-0 right-0 z-40 flex h-full w-[340px] flex-col transition-transform duration-300 ease-out backdrop-blur-[10px] ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
-        aria-label="Speed Lines Control Panel"
+        aria-label="Music Lines Control Panel"
       >
-        {/* Header */}
         <div className="border-b border-white/4 px-[20px] py-[10px]">
-          <h2 className="text-[20px] font-semibold text-white/75 tracking-wide pt-[15px] pb-0 px-0">Speed Lines</h2>
+          <h2 className="text-[20px] font-semibold text-white/75 tracking-wide pt-[15px] pb-0 px-0">Music Lines</h2>
           <p className="px-0 text-[11px] text-white/25">
-            Made by{" "}
-            <a
-              href="https://x.com/palakjain2701"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-white/40 underline decoration-white/15 underline-offset-2 transition-colors hover:text-white/65"
-              tabIndex={0}
-              aria-label="Palak on X"
-            >
-              Palak
-            </a>
-            ,{" "}
-            <a
-              href="https://x.com/hckmstrrahul"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-white/40 underline decoration-white/15 underline-offset-2 transition-colors hover:text-white/65"
-              tabIndex={0}
-              aria-label="RCB on X"
-            >
-              RCB
-            </a>
+            Bilateral equalizer with color-looping frequency bars
           </p>
         </div>
 
-        {/* Scrollable content */}
         <div className="flex-1 overflow-y-auto scrollbar-thin px-[10px] py-[15px]">
-          <Section title="Beams">
-            <Slider label="Count" value={config.numBeams} min={1} max={80} step={1} onChange={(v) => handleUpdate("numBeams", v)} />
-            <Slider label="Convergence gap" value={config.convergenceGap} min={0} max={0.4} step={0.01} onChange={(v) => handleUpdate("convergenceGap", v)} />
-            <Slider label="Inner vertical spread" value={config.verticalSpread} min={0} max={0.3} step={0.01} onChange={(v) => handleUpdate("verticalSpread", v)} />
-            <Slider label="Outer vertical spread" value={config.outerVerticalSpread} min={0.2} max={3} step={0.05} onChange={(v) => handleUpdate("outerVerticalSpread", v)} suffix="x" />
+          <Section title="Equalizer">
+            <Slider label="Bar count" value={config.barCount} min={4} max={400} step={1} onChange={(v) => handleUpdate("barCount", v)} />
+            <Slider label="Width %" value={config.barWidthPercent} min={10} max={100} step={1} onChange={(v) => handleUpdate("barWidthPercent", v)} suffix="%" />
+            <Slider label="Gap" value={config.barGap} min={0} max={200} step={1} onChange={(v) => handleUpdate("barGap", v)} suffix="px" />
+            <Slider label="Corner radius" value={config.barBorderRadius} min={0} max={16} step={1} onChange={(v) => handleUpdate("barBorderRadius", v)} suffix="px" />
+            <Slider label="Min height" value={config.minHeight} min={1} max={1000} step={1} onChange={(v) => handleUpdate("minHeight", v)} suffix="px" />
+            <Slider label="Max height" value={config.maxHeight} min={40} max={1000} step={1} onChange={(v) => handleUpdate("maxHeight", v)} suffix="px" />
+            <Slider label="Vertical offset" value={config.barsOffsetY} min={-500} max={500} step={1} onChange={(v) => handleUpdate("barsOffsetY", v)} suffix="px" />
+            <Slider label="Base opacity" value={config.barBaseOpacity} min={0} max={1} step={0.01} onChange={(v) => handleUpdate("barBaseOpacity", v)} />
+            <ColorInput label="Base color" value={config.barBaseColor || "#333333"} onChange={(v) => handleUpdate("barBaseColor", v)} />
+          </Section>
+
+          <Section title="Motion">
+            <Slider label="Speed" value={config.speed} min={0.1} max={5} step={0.1} onChange={(v) => handleUpdate("speed", v)} suffix="x" />
+            <Slider label="Pulse frequency" value={config.pulseFreq} min={0.05} max={3} step={0.05} onChange={(v) => handleUpdate("pulseFreq", v)} />
+            <Slider label="Chaos" value={config.chaos} min={0} max={1} step={0.01} onChange={(v) => handleUpdate("chaos", v)} />
+            <Slider label="Wave frequency" value={config.waveFreq} min={0.01} max={1} step={0.01} onChange={(v) => handleUpdate("waveFreq", v)} />
           </Section>
 
           <Section title="Colors" contentClassName="gap-[16px]">
-            <div className="flex flex-col gap-[12px] px-[10px]">
-              <div className="flex items-center justify-between">
-                <span className="text-[12px] font-medium text-white/40">Beam palette</span>
-                <button
-                  type="button"
-                  onClick={handleAddColor}
-                  className="flex h-[20px] w-[20px] items-center justify-center rounded-[6px] bg-white/6 text-[12px] leading-none text-white/40 transition-colors hover:bg-white/12 hover:text-white/70 cursor-pointer"
-                  aria-label="Add color"
-                  tabIndex={0}
-                >
-                  +
-                </button>
-              </div>
-              <div className="flex flex-wrap gap-[10px]">
-                {config.beamColors.map((color, i) => (
-                  <ColorChip key={i} color={color} onChange={(v) => handleColorChange(i, v)} onRemove={() => handleColorRemove(i)} />
-                ))}
-              </div>
-            </div>
-            <ColorInput label="Accent" value={config.accentColor} onChange={(v) => handleUpdate("accentColor", v)} />
+            <Slider label="Color sharpness" value={config.colorSharpness} min={1} max={15} step={1} onChange={(v) => handleUpdate("colorSharpness", v)} />
+            <ColorInput label="Color A" value={config.colorOrange} onChange={(v) => handleUpdate("colorOrange", v)} />
+            <ColorInput label="Color B" value={config.colorBlue} onChange={(v) => handleUpdate("colorBlue", v)} />
             <ColorInput label="Background" value={config.backgroundColor} onChange={(v) => handleUpdate("backgroundColor", v)} />
           </Section>
 
-          <Section title="Stroke">
-            <Slider label="Min opacity" value={config.opacityMin} min={0} max={1} step={0.01} onChange={(v) => handleUpdate("opacityMin", v)} />
-            <Slider label="Max opacity" value={config.opacityMax} min={0} max={1} step={0.01} onChange={(v) => handleUpdate("opacityMax", v)} />
-            <Slider label="Min width" value={config.strokeWidthMin} min={0.1} max={8} step={0.1} onChange={(v) => handleUpdate("strokeWidthMin", v)} suffix="px" />
-            <Slider label="Max width" value={config.strokeWidthMax} min={0.1} max={8} step={0.1} onChange={(v) => handleUpdate("strokeWidthMax", v)} suffix="px" />
-          </Section>
-
-          <Section title="Animation" defaultOpen={false}>
-            <Slider label="Chance" value={config.animationChance} min={0} max={1} step={0.01} onChange={(v) => handleUpdate("animationChance", v)} />
-            <Slider label="Min duration" value={config.animationSpeedMin} min={0.5} max={20} step={0.5} onChange={(v) => handleUpdate("animationSpeedMin", v)} suffix="s" />
-            <Slider label="Max duration" value={config.animationSpeedMax} min={0.5} max={20} step={0.5} onChange={(v) => handleUpdate("animationSpeedMax", v)} suffix="s" />
-            <Slider label="Dash length" value={config.dashLength} min={5} max={200} step={5} onChange={(v) => handleUpdate("dashLength", v)} suffix="px" />
-            <Slider label="Dash gap" value={config.dashGap} min={100} max={3000} step={50} onChange={(v) => handleUpdate("dashGap", v)} suffix="px" />
-            <Slider label="Particle extra width" value={config.particleExtraWidth} min={0} max={5} step={0.1} onChange={(v) => handleUpdate("particleExtraWidth", v)} suffix="px" />
-          </Section>
-
           <Section title="Glow & Effects" defaultOpen={false}>
-            <Slider label="Glow blur" value={config.glowBlur} min={0} max={20} step={0.5} onChange={(v) => handleUpdate("glowBlur", v)} suffix="px" />
             <Toggle label="Edge glow" value={config.showEdgeGlow} onChange={(v) => handleUpdate("showEdgeGlow", v)} />
             {config.showEdgeGlow && (
               <Slider label="Edge glow opacity" value={config.edgeGlowOpacity} min={0} max={0.5} step={0.01} onChange={(v) => handleUpdate("edgeGlowOpacity", v)} />
@@ -623,16 +459,6 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ config, onChange }) => {
             <Toggle label="Center vignette" value={config.showVignette} onChange={(v) => handleUpdate("showVignette", v)} />
             {config.showVignette && (
               <Slider label="Vignette opacity" value={config.vignetteOpacity} min={0} max={1} step={0.01} onChange={(v) => handleUpdate("vignetteOpacity", v)} />
-            )}
-          </Section>
-
-          <Section title="Accent Beams" defaultOpen={false}>
-            <Toggle label="Show accent beams" value={config.showAccentBeams} onChange={(v) => handleUpdate("showAccentBeams", v)} />
-            {config.showAccentBeams && (
-              <>
-                <Slider label="Opacity" value={config.accentOpacity} min={0} max={1} step={0.01} onChange={(v) => handleUpdate("accentOpacity", v)} />
-                <Slider label="Stroke width" value={config.accentStrokeWidth} min={0.5} max={8} step={0.1} onChange={(v) => handleUpdate("accentStrokeWidth", v)} suffix="px" />
-              </>
             )}
           </Section>
 
@@ -678,7 +504,6 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ config, onChange }) => {
           </Section>
         </div>
 
-        {/* Footer actions */}
         <div className="border-t border-white/4 p-[20px] flex flex-col gap-[10px] backdrop-blur-[8px]">
           <button
             type="button"
@@ -717,7 +542,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ config, onChange }) => {
               type="button"
               onClick={handleRandomize}
               className="flex flex-1 items-center justify-center gap-[8px] rounded-[9999px] bg-white/4 px-[16px] py-[10px] text-[11px] font-semibold uppercase tracking-widest text-white/40 ring-1 ring-inset ring-white/4 transition-all duration-200 hover:bg-white/8 hover:text-white/65 active:scale-[0.98] cursor-pointer"
-              aria-label="Randomize seed"
+              aria-label="Randomize parameters"
               tabIndex={0}
             >
               <svg className="h-[14px] w-[14px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -744,4 +569,4 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ config, onChange }) => {
   );
 };
 
-export default ControlPanel;
+export default MusicLinesControlPanel;

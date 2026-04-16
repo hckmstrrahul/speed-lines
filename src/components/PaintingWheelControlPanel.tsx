@@ -142,13 +142,13 @@ const Toggle: React.FC<ToggleProps> = ({ label, value, onChange }) => {
         aria-checked={value}
         aria-label={label}
         onClick={handleToggle}
-        className={`relative h-[22px] w-[40px] rounded-[9999px] transition-colors duration-200 cursor-pointer ${
+        className={`relative h-[18px] w-[36px] rounded-[9999px] transition-colors duration-200 cursor-pointer ${
           value ? "bg-linear-to-r from-[#308698] to-[#5ab899]" : "bg-white/8"
         }`}
         tabIndex={0}
       >
         <span
-          className={`absolute top-[3px] left-[3px] h-[16px] w-[16px] rounded-[9999px] shadow-sm transition-transform duration-200 ${
+          className={`absolute top-[2px] left-[2px] h-[14px] w-[14px] rounded-[9999px] shadow-sm transition-transform duration-200 ${
             value ? "translate-x-[18px] bg-white" : "translate-x-0 bg-white/50"
           }`}
         />

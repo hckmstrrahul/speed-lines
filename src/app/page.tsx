@@ -22,8 +22,13 @@ import InfiniteGridBackground, {
   DEFAULT_INFINITE_GRID_CONFIG,
 } from "@/components/InfiniteGridBackground";
 import InfiniteGridControlPanel from "@/components/InfiniteGridControlPanel";
+import MusicLinesBackground, {
+  type MusicLinesConfig,
+  DEFAULT_MUSIC_LINES_CONFIG,
+} from "@/components/MusicLinesBackground";
+import MusicLinesControlPanel from "@/components/MusicLinesControlPanel";
 
-type ActiveTab = 1 | 2 | 3 | 4;
+type ActiveTab = 1 | 2 | 3 | 4 | 5;
 
 const Home = () => {
   const [activeTab, setActiveTab] = useState<ActiveTab>(1);
@@ -34,6 +39,9 @@ const Home = () => {
   );
   const [infiniteGridConfig, setInfiniteGridConfig] = useState<InfiniteGridConfig>(
     DEFAULT_INFINITE_GRID_CONFIG
+  );
+  const [musicLinesConfig, setMusicLinesConfig] = useState<MusicLinesConfig>(
+    DEFAULT_MUSIC_LINES_CONFIG
   );
 
   const handleConfigChange = useCallback((newConfig: SpeedLinesConfig) => {
@@ -52,6 +60,10 @@ const Home = () => {
     setInfiniteGridConfig(newConfig);
   }, []);
 
+  const handleMusicLinesConfigChange = useCallback((newConfig: MusicLinesConfig) => {
+    setMusicLinesConfig(newConfig);
+  }, []);
+
   const handleTabSwitch = useCallback((tab: ActiveTab) => {
     setActiveTab(tab);
   }, []);
@@ -67,7 +79,9 @@ const Home = () => {
               ? "#030303"
               : activeTab === 3
                 ? "#050505"
-                : infiniteGridConfig.vignetteColor,
+                : activeTab === 4
+                  ? infiniteGridConfig.vignetteColor
+                  : musicLinesConfig.backgroundColor,
       }}
     >
       {/* Tab Switcher — circular pill at top center */}
@@ -128,6 +142,20 @@ const Home = () => {
         >
           4
         </button>
+        <button
+          type="button"
+          onClick={() => handleTabSwitch(5)}
+          className={`relative flex h-[30px] w-[30px] items-center justify-center rounded-[9999px] text-[12px] font-semibold transition-all duration-200 cursor-pointer ${
+            activeTab === 5
+              ? "bg-white/12 text-white shadow-sm"
+              : "text-white/35 hover:text-white/60"
+          }`}
+          aria-label="Music Lines effect"
+          aria-pressed={activeTab === 5}
+          tabIndex={0}
+        >
+          5
+        </button>
       </div>
 
       {/* Tab 1: Speed Lines */}
@@ -174,6 +202,17 @@ const Home = () => {
             <InfiniteGridBackground config={infiniteGridConfig} />
           </div>
           <InfiniteGridControlPanel config={infiniteGridConfig} onChange={handleInfiniteGridConfigChange} />
+        </>
+      )}
+
+      {/* Tab 5: Music Lines */}
+      {activeTab === 5 && (
+        <>
+          <div className="absolute inset-0">
+            <MusicLinesBackground config={musicLinesConfig} />
+          </div>
+          <HeroSection config={musicLinesConfig} gridIdPrefix="ml-" />
+          <MusicLinesControlPanel config={musicLinesConfig} onChange={handleMusicLinesConfigChange} />
         </>
       )}
     </main>
