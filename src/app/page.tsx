@@ -248,7 +248,7 @@ const Home = () => {
       {activeTab === 6 && (
         <>
           <div className="absolute inset-0">
-            <GlassBarsBackground config={glassBarsConfig} />
+            <GlassBarsBackground config={glassBarsConfig} onConfigChange={handleGlassBarsConfigChange} />
           </div>
           <GlassBarsControlPanel config={glassBarsConfig} onChange={handleGlassBarsConfigChange} />
         </>

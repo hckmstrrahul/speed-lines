@@ -256,6 +256,7 @@ const parseConfigFromText = (text: string): GlassBarsConfig | null => {
       "transmission", "glassOpacity", "backdropBlur", "thickness", "ior", "metalness",
       "dataSeed", "barWidth", "barDepth", "barRadius", "barSpacing",
       "groupSpacing", "hatchSpacing", "hatchThickness", "animationTrigger",
+      "cameraX", "cameraY", "cameraZ", "cameraZoom",
       "overlayY", "gridSizeOverlay", "gridOpacityOverlay",
       "centerGlowRadius", "centerGlowOpacity", "centerGlowY",
     ];
@@ -436,6 +437,13 @@ const GlassBarsControlPanel: React.FC<GlassBarsControlPanelProps> = ({ config, o
           <Section title="Change Indicators" defaultOpen={false}>
             <Slider label="Hatch spacing" value={config.hatchSpacing} min={0.02} max={0.5} step={0.01} onChange={(v) => handleUpdate("hatchSpacing", v)} />
             <Slider label="Hatch thickness" value={config.hatchThickness} min={0.01} max={0.2} step={0.01} onChange={(v) => handleUpdate("hatchThickness", v)} />
+          </Section>
+
+          <Section title="Camera" defaultOpen={false}>
+            <Slider label="Position X" value={config.cameraX} min={-50} max={50} step={0.5} onChange={(v) => handleUpdate("cameraX", v)} />
+            <Slider label="Position Y" value={config.cameraY} min={-50} max={50} step={0.5} onChange={(v) => handleUpdate("cameraY", v)} />
+            <Slider label="Position Z" value={config.cameraZ} min={1} max={100} step={0.5} onChange={(v) => handleUpdate("cameraZ", v)} />
+            <Slider label="Zoom" value={config.cameraZoom} min={0.1} max={5} step={0.05} onChange={(v) => handleUpdate("cameraZoom", v)} />
           </Section>
 
           <Section title="Surface Grid" defaultOpen={false}>

@@ -35,6 +35,10 @@ export type GlassBarsConfig = {
   hatchSpacing: number;
   hatchThickness: number;
   animationTrigger: number;
+  cameraX: number;
+  cameraY: number;
+  cameraZ: number;
+  cameraZoom: number;
   showOverlay: boolean;
   overlayHeading: string;
   overlaySubtext: string;
@@ -56,7 +60,7 @@ export type GlassBarsConfig = {
 export const DEFAULT_GLASS_BARS_CONFIG: GlassBarsConfig = {
   colorA: "#ff5c60",
   colorB: "#a4df7a",
-  bgColor: "#14161a",
+  bgColor: "#060809",
   showSurfaceGrid: true,
   gridColor: "#2a2e35",
   gridSize: 60,
@@ -66,7 +70,7 @@ export const DEFAULT_GLASS_BARS_CONFIG: GlassBarsConfig = {
   glowBlur: 0.37,
   glowThreshold: 0.42,
   coreBrightness: 0.1,
-  transmission: 0.65,
+  transmission: 0.32,
   glassOpacity: 1.0,
   backdropBlur: 0.73,
   thickness: 1.0,
@@ -81,6 +85,10 @@ export const DEFAULT_GLASS_BARS_CONFIG: GlassBarsConfig = {
   hatchSpacing: 0.4,
   hatchThickness: 0.08,
   animationTrigger: 0,
+  cameraX: 0,
+  cameraY: 15,
+  cameraZ: 35,
+  cameraZoom: 1,
   showOverlay: true,
   overlayHeading: "Glass Bars",
   overlaySubtext: "3D frosted glass bar visualization with bloom and physics",
@@ -201,14 +209,18 @@ type SceneState = {
 
 type GlassBarsBackgroundProps = {
   config: GlassBarsConfig;
+  onConfigChange?: (config: GlassBarsConfig) => void;
 };
 
-const GlassBarsBackground: React.FC<GlassBarsBackgroundProps> = ({ config }) => {
+const GlassBarsBackground: React.FC<GlassBarsBackgroundProps> = ({ config, onConfigChange }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const configRef = useRef(config);
   configRef.current = config;
+  const onConfigChangeRef = useRef(onConfigChange);
+  onConfigChangeRef.current = onConfigChange;
   const sceneRef = useRef<SceneState | null>(null);
   const animTriggerRef = useRef<(() => void) | null>(null);
+  const lastCameraCfg = useRef({ x: config.cameraX, y: config.cameraY, z: config.cameraZ, zoom: config.cameraZoom });
 
   const disposeScene = useCallback((s: SceneState) => {
     s.disposables.forEach((g) => g.dispose());
@@ -246,13 +258,29 @@ const GlassBarsBackground: React.FC<GlassBarsBackgroundProps> = ({ config }) => 
       0.1,
       1000
     );
-    camera.position.set(0, 15, 35);
+    camera.position.set(cfg.cameraX, cfg.cameraY, cfg.cameraZ);
+    camera.zoom = cfg.cameraZoom;
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
     controls.target.set(0, 5, 0);
     controls.update();
+
+    const handleControlsChange = () => {
+      const cb = onConfigChangeRef.current;
+      if (!cb) return;
+      const p = camera.position;
+      const rx = Math.round(p.x * 10) / 10;
+      const ry = Math.round(p.y * 10) / 10;
+      const rz = Math.round(p.z * 10) / 10;
+      const rZoom = Math.round(camera.zoom * 100) / 100;
+      const cur = configRef.current;
+      if (rx === cur.cameraX && ry === cur.cameraY && rz === cur.cameraZ && rZoom === cur.cameraZoom) return;
+      lastCameraCfg.current = { x: rx, y: ry, z: rz, zoom: rZoom };
+      cb({ ...cur, cameraX: rx, cameraY: ry, cameraZ: rz, cameraZoom: rZoom });
+    };
+    controls.addEventListener("change", handleControlsChange);
 
     scene.add(new THREE.AmbientLight(0xffffff, 0.6));
 
@@ -358,6 +386,21 @@ const GlassBarsBackground: React.FC<GlassBarsBackgroundProps> = ({ config }) => 
 
       const currentCfg = configRef.current;
 
+      const lc = lastCameraCfg.current;
+      if (
+        lc.x !== currentCfg.cameraX ||
+        lc.y !== currentCfg.cameraY ||
+        lc.z !== currentCfg.cameraZ ||
+        lc.zoom !== currentCfg.cameraZoom
+      ) {
+        camera.position.set(currentCfg.cameraX, currentCfg.cameraY, currentCfg.cameraZ);
+        camera.zoom = currentCfg.cameraZoom;
+        camera.updateProjectionMatrix();
+        lc.x = currentCfg.cameraX;
+        lc.y = currentCfg.cameraY;
+        lc.z = currentCfg.cameraZ;
+        lc.zoom = currentCfg.cameraZoom;
+      }
       controls.update();
 
       bloomPass.strength = currentCfg.glowStrength;
@@ -438,6 +481,7 @@ const GlassBarsBackground: React.FC<GlassBarsBackgroundProps> = ({ config }) => 
       container.removeEventListener("mousemove", handleMouseMove);
       container.removeEventListener("mouseleave", handleMouseLeave);
       window.removeEventListener("resize", handleResize);
+      controls.removeEventListener("change", handleControlsChange);
       controls.dispose();
       renderer.dispose();
       const current = sceneRef.current;
