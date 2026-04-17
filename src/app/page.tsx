@@ -27,8 +27,13 @@ import MusicLinesBackground, {
   DEFAULT_MUSIC_LINES_CONFIG,
 } from "@/components/MusicLinesBackground";
 import MusicLinesControlPanel from "@/components/MusicLinesControlPanel";
+import GlassBarsBackground, {
+  type GlassBarsConfig,
+  DEFAULT_GLASS_BARS_CONFIG,
+} from "@/components/GlassBarsBackground";
+import GlassBarsControlPanel from "@/components/GlassBarsControlPanel";
 
-type ActiveTab = 1 | 2 | 3 | 4 | 5;
+type ActiveTab = 1 | 2 | 3 | 4 | 5 | 6;
 
 const Home = () => {
   const [activeTab, setActiveTab] = useState<ActiveTab>(1);
@@ -42,6 +47,9 @@ const Home = () => {
   );
   const [musicLinesConfig, setMusicLinesConfig] = useState<MusicLinesConfig>(
     DEFAULT_MUSIC_LINES_CONFIG
+  );
+  const [glassBarsConfig, setGlassBarsConfig] = useState<GlassBarsConfig>(
+    DEFAULT_GLASS_BARS_CONFIG
   );
 
   const handleConfigChange = useCallback((newConfig: SpeedLinesConfig) => {
@@ -64,6 +72,10 @@ const Home = () => {
     setMusicLinesConfig(newConfig);
   }, []);
 
+  const handleGlassBarsConfigChange = useCallback((newConfig: GlassBarsConfig) => {
+    setGlassBarsConfig(newConfig);
+  }, []);
+
   const handleTabSwitch = useCallback((tab: ActiveTab) => {
     setActiveTab(tab);
   }, []);
@@ -81,7 +93,9 @@ const Home = () => {
                 ? "#050505"
                 : activeTab === 4
                   ? infiniteGridConfig.vignetteColor
-                  : musicLinesConfig.backgroundColor,
+                  : activeTab === 5
+                    ? musicLinesConfig.backgroundColor
+                    : glassBarsConfig.bgColor,
       }}
     >
       {/* Tab Switcher — circular pill at top center */}
@@ -156,6 +170,20 @@ const Home = () => {
         >
           5
         </button>
+        <button
+          type="button"
+          onClick={() => handleTabSwitch(6)}
+          className={`relative flex h-[30px] w-[30px] items-center justify-center rounded-[9999px] text-[12px] font-semibold transition-all duration-200 cursor-pointer ${
+            activeTab === 6
+              ? "bg-white/12 text-white shadow-sm"
+              : "text-white/35 hover:text-white/60"
+          }`}
+          aria-label="Glass Bars effect"
+          aria-pressed={activeTab === 6}
+          tabIndex={0}
+        >
+          6
+        </button>
       </div>
 
       {/* Tab 1: Speed Lines */}
@@ -213,6 +241,16 @@ const Home = () => {
           </div>
           <HeroSection config={musicLinesConfig} gridIdPrefix="ml-" />
           <MusicLinesControlPanel config={musicLinesConfig} onChange={handleMusicLinesConfigChange} />
+        </>
+      )}
+
+      {/* Tab 6: Glass Bars */}
+      {activeTab === 6 && (
+        <>
+          <div className="absolute inset-0">
+            <GlassBarsBackground config={glassBarsConfig} />
+          </div>
+          <GlassBarsControlPanel config={glassBarsConfig} onChange={handleGlassBarsConfigChange} />
         </>
       )}
     </main>
